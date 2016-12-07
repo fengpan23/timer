@@ -2,6 +2,7 @@ const Events = require('events');
 
 class Timer extends Events{
     constructor(){
+        super();
         this._timer = {};
     }
 
@@ -154,14 +155,16 @@ class Timer extends Events{
     /***
      * 清除
      * @param name
+     * @param options
      */
-    clear (name) {
+    clear (name, options) {
         if (!name || typeof name != 'string')
             name = 'default';
 
         let timer = this._timer[name];
         if (timer) {
-            this.emit('stop', timer.elapsed, timer.countdown, name);
+            if(!options.silent)
+                this.emit('stop', timer.elapsed, timer.countdown, name);
             clearInterval(timer.handle);
             delete this._timer[name];
         }
